@@ -1,0 +1,32 @@
+name: "Download integrations for unity"
+description: "Download platform sdk integrations as part of creating unity images for build process"
+author: Justin Li
+
+inputs:
+  environment-folder-id:
+    description: 'ID of environment folder for project'
+    type: string
+    required: true
+  platforms:
+    description: 'Platforms to download files for.' #formatted as: '["platform1","platform2",...]'
+    type: string
+    required: true
+  runner-name:
+    description: 'Runner to download files to'
+    type: string
+    required: true
+  reuse-downloads:
+    description: Whether to clear and redownload environment files from google drive. If true, will use already downloaded files where possible
+    type: boolean
+    required: true
+  outputs:
+    installer-dict: 
+      description: "Powershell hash table with key being name of platform, and value being array of paths of installers to run"
+      value: ${{ jobs.download-env-files.outputs.installer-dict }}
+    downloads-path: 
+      description: "Path to folder where environment files were downloaded and extracted"
+      value: ${{ jobs.download-env-files.outputs.downloads-path }}
+
+runs:
+  using: docker
+  image: "Dockerfile"
